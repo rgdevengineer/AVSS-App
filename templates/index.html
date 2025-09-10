@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoShare - 50GB Free Storage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            color: var(--gray-800);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0, -30px, 0);
+            }
+            70% {
+                transform: translate3d(0, -15px, 0);
+            }
+            90% {
+                transform: translate3d(0, -4px, 0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            margin-bottom: 40px;
+            font-weight: 400;
+            animation: fadeInUp 1s ease-out 0.2s both;
+            position: relative;
+            z-index: 2;
+        }
+
+        .highlight {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px 35px;
+            border-radius: 60px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--glass-border);
+            animation: fadeInUp 1s ease-out 0.4s both;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .highlight:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Auth Section */
+        .auth-section {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--glass-border);
+            animation: fadeInUp 1s ease-out 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            pointer-events: none;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .auth-tab:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .auth-tab.active {
+            background: var(--gradient-secondary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .auth-form {
+            display: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-secondary);
+            color: white;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Main App */
+        .main-app {
+            display: none;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--glass-border);
+            animation: fadeInUp 1s ease-out 0.8s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-app::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            pointer-events: none;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
+        /* Storage Dashboard */
+        .storage-dashboard {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .storage-dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="storage-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23storage-pattern)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .storage-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 16px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-success);
+            border-radius: 8px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 3px dashed #007bff;
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .upload-zone:hover {
+            background: #e3f2fd;
+            border-color: #0056b3;
+        }
+
+        .upload-zone.dragover {
+            background: #e8f5e8;
+            border-color: #4CAF50;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .upload-subtext {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* File List */
+        .file-list {
+            margin-top: 30px;
+        }
+
+        .file-list h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .file-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #007bff;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .file-meta {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .storage-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🚀 PhotoShare</h1>
+            <p class="subtitle">The Future of File Storage</p>
+            <div class="highlight">
+                🎁 50GB FREE Storage • 📹 20GB Video Support • 🔒 No Compression
+            </div>
+        </header>
+
+        <!-- Auth Section -->
+        <section class="auth-section" id="authSection">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="showLogin()">Login</button>
+                <button class="auth-tab" onclick="showSignup()">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <h2 style="text-align: center; margin-bottom: 30px;">Welcome Back!</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" onclick="login()" style="width: 100%;">Login</button>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="auth-form">
+                <h2 style="text-align: center; margin-bottom: 30px;">Join PhotoShare Today!</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password">
+                </div>
+                <button class="btn btn-primary" onclick="signup()" style="width: 100%;">Create Free Account</button>
+            </div>
+        </section>
+
+        <!-- Main App -->
+        <main class="main-app" id="mainApp">
+            <!-- Storage Dashboard -->
+            <section class="storage-dashboard">
+                <div class="storage-header">
+                    <h2>📊 Your Storage</h2>
+                    <div id="userWelcome"></div>
+                </div>
+                <div class="storage-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="usedStorage">0GB</span>
+                        <span class="stat-label">Used</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="totalStorage">50GB</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="availableStorage">50GB</span>
+                        <span class="stat-label">Available</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="storageProgress" style="width: 0%"></div>
+                </div>
+                <div style="text-align: center; margin-top: 10px; font-size: 0.9rem;">
+                    <span id="storagePercentage">0%</span> of your 50GB used
+                </div>
+            </section>
+
+            <!-- Upload Zone -->
+            <section class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Drop files here or click to browse</div>
+                <div class="upload-subtext">
+                    Support: Images, Videos, Audio, Documents<br>
+                    Maximum file size: 20GB • No compression • Unlimited uploads
+                </div>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </section>
+
+            <!-- Upload Progress -->
+            <div id="uploadProgress" style="display: none; margin-bottom: 30px;">
+                <h3>📤 Uploading...</h3>
+                <div class="progress-bar" style="margin: 20px 0;">
+                    <div class="progress-fill" id="uploadProgressFill" style="width: 0%"></div>
+                </div>
+                <p id="uploadStatus">Preparing upload...</p>
+            </div>
+
+            <!-- Search and Filters -->
+            <section class="search-section" style="margin-bottom: 30px;">
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="searchInput" placeholder="Search files..." style="flex: 1; min-width: 200px; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px;">
+                    <select id="folderFilter" style="padding: 10px; border: 2px solid #e9ecef; border-radius: 8px;">
+                        <option value="">All Folders</option>
+                    </select>
+                    <select id="typeFilter" style="padding: 10px; border: 2px solid #e9ecef; border-radius: 8px;">
+                        <option value="">All Types</option>
+                        <option value="image">Images</option>
+                        <option value="video">Videos</option>
+                        <option value="audio">Audio</option>
+                        <option value="document">Documents</option>
+                    </select>
+                    <button onclick="searchFiles()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer;">Search</button>
+                </div>
+            </section>
+
+            <!-- AI Features Section -->
+            <section class="ai-features" style="margin-bottom: 30px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);">
+                <h3 style="color: white; margin-bottom: 15px;">🤖 AI-Powered Features</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="analyzeDuplicates()" style="padding: 8px 15px; background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; border: none; border-radius: 6px; cursor: pointer;">🔍 Find Duplicates</button>
+                    <button onclick="batchAIAnalysis()" style="padding: 8px 15px; background: linear-gradient(45deg, #4ecdc4, #44a08d); color: white; border: none; border-radius: 6px; cursor: pointer;">🧠 AI Analyze All</button>
+                    <button onclick="smartSearch()" style="padding: 8px 15px; background: linear-gradient(45deg, #a8e6cf, #52b788); color: white; border: none; border-radius: 6px; cursor: pointer;">🔎 Smart Search</button>
+                </div>
+            </section>
+
+            <!-- File Actions -->
+            <section class="file-actions" style="margin-bottom: 20px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <select id="bulkAction" style="padding: 8px; border: 2px solid #e9ecef; border-radius: 6px;">
+                        <option value="">Bulk Actions</option>
+                        <option value="delete">Delete Selected</option>
+                        <option value="move">Move to Folder</option>
+                        <option value="tag">Add Tags</option>
+                    </select>
+                    <input type="text" id="bulkFolder" placeholder="Folder name" style="display: none; padding: 8px; border: 2px solid #e9ecef; border-radius: 6px;">
+                    <input type="text" id="bulkTags" placeholder="Tags (comma separated)" style="display: none; padding: 8px; border: 2px solid #e9ecef; border-radius: 6px;">
+                    <button onclick="executeBulkAction()" id="bulkExecuteBtn" style="display: none; padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Execute</button>
+                </div>
+            </section>
+
+            <!-- File List -->
+            <section class="file-list">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>📁 Your Files</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="createFolder()" style="padding: 8px 15px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer;">New Folder</button>
+                        <button onclick="refreshFiles()" style="padding: 8px 15px; background: #17a2b8; color: white; border: none; border-radius: 6px; cursor: pointer;">Refresh</button>
+                    </div>
+                </div>
+                <div id="fileList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading your files...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature">
+                <div class="feature-icon">💾</div>
+                <h3>50GB Free Storage</h3>
+                <p>5x more than Google Photos! Store thousands of photos and videos without worrying about space limits.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📹</div>
+                <h3>Large Video Support</h3>
+                <p>Upload 20GB videos without compression or quality loss. Perfect for 4K videos and professional content.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔄</div>
+                <h3>Resumable Uploads</h3>
+                <p>Never lose progress! If your connection breaks, uploads continue from where they left off.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy First</h3>
+                <p>Your files are yours. No scanning, no AI analysis, no data sharing. Complete privacy control.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Optimized for speed with chunked uploads and smart file handling. Upload large files quickly.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌟</div>
+                <h3>No Hidden Limits</h3>
+                <p>Unlike other services, we don't compress your files or add watermarks. What you upload is what you get.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let currentToken = localStorage.getItem('token');
+        let currentUser = null;
+
+        // Initialize app
+        if (currentToken) {
+            showMainApp();
+        }
+
+        // Auth functions
+        function showLogin() {
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('signupForm').classList.remove('active');
+            document.querySelectorAll('.auth-tab')[0].classList.add('active');
+            document.querySelectorAll('.auth-tab')[1].classList.remove('active');
+        }
+
+        function showSignup() {
+            document.getElementById('signupForm').classList.add('active');
+            document.getElementById('loginForm').classList.remove('active');
+            document.querySelectorAll('.auth-tab')[1].classList.add('active');
+            document.querySelectorAll('.auth-tab')[0].classList.remove('active');
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('refresh_token', data.refresh_token);
+                    currentToken = data.access_token;
+                    currentUser = username;
+                    showMainApp();
+                } else {
+                    alert('Login failed: ' + data.message);
+                }
+            } catch (error) {
+                alert('Login error: ' + error.message);
+            }
+        }
+
+        async function signup() {
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (!username || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Account created successfully! Please login.');
+                    showLogin();
+                } else {
+                    alert('Signup failed: ' + data.message);
+                }
+            } catch (error) {
+                alert('Signup error: ' + error.message);
+            }
+        }
+
+        function showMainApp() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('mainApp').classList.add('active');
+            document.getElementById('userWelcome').textContent = `Welcome, ${currentUser || 'User'}!`;
+
+            loadStorageInfo();
+            loadFiles();
+            setupUploadZone();
+        }
+
+        // Storage functions
+        async function loadStorageInfo() {
+            try {
+                const response = await fetch('/storage/info', {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                document.getElementById('usedStorage').textContent = `${data.used_gb}GB`;
+                document.getElementById('availableStorage').textContent = `${data.available_gb}GB`;
+                document.getElementById('storageProgress').style.width = `${data.usage_percentage}%`;
+                document.getElementById('storagePercentage').textContent = `${data.usage_percentage}%`;
+            } catch (error) {
+                console.error('Error loading storage info:', error);
+            }
+        }
+
+        // File functions
+        async function loadFiles() {
+            try {
+                const response = await fetch('/files', {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+                const fileList = document.getElementById('fileList');
+
+                if (data.files.length === 0) {
+                    fileList.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No files uploaded yet. Drop some files above to get started!</p>';
+                    return;
+                }
+
+                fileList.innerHTML = '';
+                data.files.forEach(file => {
+                    const fileIcon = getFileIcon(file.file_type);
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <div class="file-icon">${fileIcon}</div>
+                        <div class="file-info">
+                            <div class="file-name">${file.filename}</div>
+                            <div class="file-meta">${file.size_mb}MB • ${file.file_type} • ${new Date(file.upload_date).toLocaleDateString()}</div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="btn btn-success btn-sm" onclick="viewFile('${file.url}')">View</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteFile(${file.id})">Delete</button>
+                        </div>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+            } catch (error) {
+                console.error('Error loading files:', error);
+                document.getElementById('fileList').innerHTML = '<p style="text-align: center; color: #dc3545;">Error loading files. Please try again.</p>';
+            }
+        }
+
+        function getFileIcon(fileType) {
+            const icons = {
+                'image': '🖼️',
+                'video': '🎥',
+                'audio': '🎵',
+                'document': '📄'
+            };
+            return icons[fileType] || '📁';
+        }
+
+        function viewFile(url) {
+            window.open(url, '_blank');
+        }
+
+        async function deleteFile(fileId) {
+            if (!confirm('Are you sure you want to delete this file?')) return;
+
+            try {
+                const response = await fetch(`/files/${fileId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    loadFiles();
+                    loadStorageInfo();
+                } else {
+                    const data = await response.json();
+                    alert('Delete failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Delete error: ' + error.message);
+            }
+        }
+
+        // Upload functions
+        function setupUploadZone() {
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+
+            uploadZone.addEventListener('click', () => fileInput.click());
+
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.size > 20 * 1024 * 1024 * 1024) { // 20GB
+                    alert(`${file.name} is too large! Maximum 20GB.`);
+                    continue;
+                }
+                uploadFile(file);
+            }
+        }
+
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('uploadStatus').textContent = `Uploading ${file.name}...`;
+            document.getElementById('uploadProgressFill').style.width = '0%';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('uploadProgressFill').style.width = '100%';
+                    document.getElementById('uploadStatus').textContent = 'Upload complete!';
+                    setTimeout(() => {
+                        document.getElementById('uploadProgress').style.display = 'none';
+                    }, 2000);
+
+                    loadFiles();
+                    loadStorageInfo();
+                } else {
+                    alert('Upload failed: ' + data.error);
+                    document.getElementById('uploadProgress').style.display = 'none';
+                }
+            } catch (error) {
+                alert('Upload error: ' + error.message);
+                document.getElementById('uploadProgress').style.display = 'none';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refresh_token');
+            currentToken = null;
+            currentUser = null;
+            location.reload();
+        }
+
+        // Add logout button
+        setTimeout(() => {
+            if (document.getElementById('mainApp').classList.contains('active')) {
+                const logoutBtn = document.createElement('button');
+                logoutBtn.className = 'btn btn-danger';
+                logoutBtn.textContent = 'Logout';
+                logoutBtn.onclick = logout;
+                logoutBtn.style.cssText = 'position: fixed; top: 20px; right: 20px;';
+                document.body.appendChild(logoutBtn);
+            }
+        }, 1000);
+
+        // Advanced Features Functions
+
+        // Search and Filter
+        async function searchFiles() {
+            const query = document.getElementById('searchInput').value;
+            const folder = document.getElementById('folderFilter').value;
+            const fileType = document.getElementById('typeFilter').value;
+
+            try {
+                let url = '/files/search?q=' + encodeURIComponent(query);
+                if (folder) url += '&folder=' + encodeURIComponent(folder);
+                if (fileType) url += '&type=' + encodeURIComponent(fileType);
+
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+                displaySearchResults(data);
+            } catch (error) {
+                console.error('Search error:', error);
+            }
+        }
+
+        function displaySearchResults(data) {
+            const fileList = document.getElementById('fileList');
+
+            if (data.files.length === 0) {
+                fileList.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No files found matching your search.</p>';
+                return;
+            }
+
+            fileList.innerHTML = `<h4>Found ${data.total_results} results</h4>`;
+            data.files.forEach(file => {
+                const fileIcon = getFileIcon(file.file_type);
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-icon">${fileIcon}</div>
+                    <div class="file-info">
+                        <div class="file-name">${file.filename}</div>
+                        <div class="file-meta">${file.size_mb}MB • ${file.file_type} • Folder: ${file.folder || 'root'}</div>
+                        ${file.tags ? `<div style="color: #666; font-size: 0.8rem;">Tags: ${file.tags}</div>` : ''}
+                        ${file.description ? `<div style="color: #666; font-size: 0.8rem;">${file.description}</div>` : ''}
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-success btn-sm" onclick="viewFile('${file.url}')">View</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFile(${file.id})">Delete</button>
+                        <button class="btn btn-primary btn-sm" onclick="shareFile(${file.id})">Share</button>
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        // File Sharing
+        async function shareFile(fileId) {
+            try {
+                const response = await fetch(`/files/${fileId}/share`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Copy share URL to clipboard
+                    navigator.clipboard.writeText(data.share_url).then(() => {
+                        alert('Share link copied to clipboard!\n\n' + data.share_url);
+                    }).catch(() => {
+                        alert('Share link created!\n\n' + data.share_url);
+                    });
+                } else {
+                    alert('Share failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Share error: ' + error.message);
+            }
+        }
+
+        // Folder Management
+        async function createFolder() {
+            const folderName = prompt('Enter folder name:');
+            if (!folderName) return;
+
+            // For now, we'll create folders by moving files to them
+            alert('Folder created! You can now move files to "' + folderName + '" using the file actions.');
+            loadFolders();
+        }
+
+        async function loadFolders() {
+            try {
+                const response = await fetch('/folders', {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+                const folderFilter = document.getElementById('folderFilter');
+                folderFilter.innerHTML = '<option value="">All Folders</option>';
+
+                data.folders.forEach(folder => {
+                    folderFilter.innerHTML += `<option value="${folder}">${folder}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading folders:', error);
+            }
+        }
+
+        // Bulk Actions
+        document.getElementById('bulkAction').addEventListener('change', function() {
+            const action = this.value;
+            const bulkFolder = document.getElementById('bulkFolder');
+            const bulkTags = document.getElementById('bulkTags');
+            const bulkExecuteBtn = document.getElementById('bulkExecuteBtn');
+
+            if (action === 'move') {
+                bulkFolder.style.display = 'inline-block';
+                bulkTags.style.display = 'none';
+                bulkExecuteBtn.style.display = 'inline-block';
+            } else if (action === 'tag') {
+                bulkFolder.style.display = 'none';
+                bulkTags.style.display = 'inline-block';
+                bulkExecuteBtn.style.display = 'inline-block';
+            } else if (action === 'delete') {
+                bulkFolder.style.display = 'none';
+                bulkTags.style.display = 'none';
+                bulkExecuteBtn.style.display = 'inline-block';
+            } else {
+                bulkFolder.style.display = 'none';
+                bulkTags.style.display = 'none';
+                bulkExecuteBtn.style.display = 'none';
+            }
+        });
+
+        async function executeBulkAction() {
+            const action = document.getElementById('bulkAction').value;
+            const selectedFiles = getSelectedFiles();
+
+            if (selectedFiles.length === 0) {
+                alert('Please select files first!');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to ${action} ${selectedFiles.length} files?`)) return;
+
+            try {
+                if (action === 'delete') {
+                    for (let fileId of selectedFiles) {
+                        await deleteFile(fileId);
+                    }
+                } else if (action === 'move') {
+                    const folder = document.getElementById('bulkFolder').value;
+                    if (!folder) {
+                        alert('Please enter a folder name!');
+                        return;
+                    }
+                    for (let fileId of selectedFiles) {
+                        await moveFileToFolder(fileId, folder);
+                    }
+                } else if (action === 'tag') {
+                    const tags = document.getElementById('bulkTags').value;
+                    if (!tags) {
+                        alert('Please enter tags!');
+                        return;
+                    }
+                    for (let fileId of selectedFiles) {
+                        await updateFileTags(fileId, tags);
+                    }
+                }
+
+                loadFiles();
+                clearSelections();
+            } catch (error) {
+                alert('Bulk action failed: ' + error.message);
+            }
+        }
+
+        function getSelectedFiles() {
+            // For now, we'll implement a simple selection system
+            // In a real app, you'd add checkboxes to each file item
+            return []; // Placeholder
+        }
+
+        function clearSelections() {
+            document.getElementById('bulkAction').value = '';
+            document.getElementById('bulkFolder').style.display = 'none';
+            document.getElementById('bulkTags').style.display = 'none';
+            document.getElementById('bulkExecuteBtn').style.display = 'none';
+        }
+
+        async function moveFileToFolder(fileId, folder) {
+            try {
+                const response = await fetch(`/files/${fileId}/folder`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify({ folder })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Move failed');
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        async function updateFileTags(fileId, tags) {
+            try {
+                const response = await fetch(`/files/${fileId}/tags`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify({ tags })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Tag update failed');
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        // Refresh and Initialize
+        async function refreshFiles() {
+            await loadFiles();
+            await loadFolders();
+        }
+
+        // Initialize advanced features when main app loads
+        function initializeAdvancedFeatures() {
+            loadFolders();
+            // Add event listeners for search
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchFiles();
+                }
+            });
+        }
+
+        // AI Features Functions
+
+        async function analyzeDuplicates() {
+            try {
+                const response = await fetch('/ai/duplicates', {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.duplicates.length === 0) {
+                        alert('No duplicate images found!');
+                        return;
+                    }
+
+                    let message = `Found ${data.total_duplicate_groups} duplicate groups:\n\n`;
+                    data.duplicates.forEach((group, index) => {
+                        message += `Group ${index + 1}: ${group.duplicates.length + 1} similar images\n`;
+                        message += `Original: ${group.original.filename}\n`;
+                        group.duplicates.forEach(dup => {
+                            message += `  Similar: ${dup.filename} (${dup.similarity_score}% match)\n`;
+                        });
+                        message += '\n';
+                    });
+
+                    alert(message + 'Consider deleting duplicate files to save storage space.');
+                } else {
+                    alert('Error finding duplicates: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function batchAIAnalysis() {
+            if (!confirm('This will analyze all your images with AI. This may take some time. Continue?')) {
+                return;
+            }
+
+            try {
+                // First get all image files
+                const response = await fetch('/files', {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+                const imageFiles = data.files.filter(file => file.file_type === 'image');
+
+                if (imageFiles.length === 0) {
+                    alert('No images found to analyze!');
+                    return;
+                }
+
+                // Prepare file IDs for batch analysis
+                const fileIds = imageFiles.map(file => file.id);
+
+                const analysisResponse = await fetch('/ai/batch-analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify({ file_ids: fileIds })
+                });
+
+                const analysisData = await analysisResponse.json();
+
+                if (analysisResponse.ok) {
+                    alert(`AI Analysis Complete!\n\nProcessed: ${analysisData.processed} files\nFailed: ${analysisData.failed} files\n\nYour images now have AI-generated descriptions and tags!`);
+                    loadFiles(); // Refresh the file list
+                } else {
+                    alert('Batch analysis failed: ' + analysisData.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function smartSearch() {
+            const query = prompt('Enter your smart search query (e.g., "find landscape photos of mountains" or "show me food pictures"):');
+            if (!query) return;
+
+            try {
+                const response = await fetch('/ai/search?q=' + encodeURIComponent(query), {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displaySmartSearchResults(data, query);
+                } else {
+                    alert('Smart search failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function displaySmartSearchResults(data, query) {
+            const fileList = document.getElementById('fileList');
+
+            if (data.results.length === 0) {
+                fileList.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No files found matching your smart search.</p>';
+                return;
+            }
+
+            fileList.innerHTML = `<h4>🤖 Smart Search Results for "${query}"</h4><p>Found ${data.total_results} matches</p>`;
+            data.results.forEach(result => {
+                const fileIcon = getFileIcon(result.file_type);
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-icon">${fileIcon}</div>
+                    <div class="file-info">
+                        <div class="file-name">${result.filename}</div>
+                        <div class="file-meta">${result.size_mb}MB • ${result.file_type} • ${result.relevance_score}% match</div>
+                        ${result.ai_description ? `<div style="color: #666; font-size: 0.8rem;">AI: ${result.ai_description}</div>` : ''}
+                        ${result.ai_tags && result.ai_tags.length > 0 ? `<div style="color: #666; font-size: 0.8rem;">AI Tags: ${result.ai_tags.join(', ')}</div>` : ''}
+                        <div style="color: #888; font-size: 0.7rem;">Match reasons: ${result.match_reasons.join(', ')}</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-success btn-sm" onclick="viewFile('${result.url}')">View</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFile(${result.id})">Delete</button>
+                        <button class="btn btn-primary btn-sm" onclick="analyzeFileAI(${result.id})">AI Info</button>
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        async function analyzeFileAI(fileId) {
+            try {
+                const response = await fetch(`/ai/analyze/${fileId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    let message = `AI Analysis for ${data.filename}:\n\n`;
+
+                    if (data.ai_analysis.ai_description) {
+                        message += `📝 Description: ${data.ai_analysis.ai_description}\n\n`;
+                    }
+
+                    if (data.ai_analysis.ai_tags && data.ai_analysis.ai_tags.length > 0) {
+                        message += `🏷️ AI Tags: ${data.ai_analysis.ai_tags.join(', ')}\n\n`;
+                    }
+
+                    if (data.ai_analysis.quality_score) {
+                        message += `⭐ Quality Score: ${data.ai_analysis.quality_score}/100\n`;
+                    }
+
+                    if (data.ai_analysis.image_metadata) {
+                        const meta = data.ai_analysis.image_metadata;
+                        message += `\n📊 Image Details:\n`;
+                        message += `Resolution: ${meta.resolution}\n`;
+                        message += `Sharpness: ${meta.sharpness}\n`;
+                        message += `Brightness: ${meta.brightness}\n`;
+                        message += `Contrast: ${meta.contrast}\n`;
+                        message += `Colorfulness: ${meta.colorfulness}\n`;
+                    }
+
+                    alert(message);
+                } else {
+                    alert('AI analysis failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function optimizeImage(fileId) {
+            if (!confirm('This will optimize the image to reduce file size. Continue?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/ai/optimize/${fileId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Image optimized successfully!\n\nOriginal: ${data.original_size_mb}MB\nOptimized: ${data.optimized_size_mb}MB\nSavings: ${data.savings_mb}MB (${data.savings_percentage}%)\n\nStorage space saved!`);
+                    loadFiles();
+                    loadStorageInfo();
+                } else {
+                    alert('Optimization failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function findSimilarImages(fileId) {
+            try {
+                const response = await fetch(`/ai/similar/${fileId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.similar_images.length === 0) {
+                        alert('No similar images found.');
+                        return;
+                    }
+
+                    let message = `Similar images to "${data.target_image.filename}":\n\n`;
+                    data.similar_images.forEach((img, index) => {
+                        message += `${index + 1}. ${img.filename} (${img.similarity_score}% match)\n`;
+                    });
+
+                    alert(message);
+                } else {
+                    alert('Error finding similar images: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Override showMainApp to include advanced features
+        const originalShowMainApp = showMainApp;
+        showMainApp = function() {
+            originalShowMainApp();
+            setTimeout(initializeAdvancedFeatures, 1000);
+        };
+    </script>
+</body>
+</html>

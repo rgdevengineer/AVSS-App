@@ -1,0 +1,57 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Uploads (in production, use cloud storage)
+uploads/
+!uploads/.gitkeep
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# AI Models cache
+.cache/
+huggingface/
+
+# Node modules (if any)
+node_modules/
+
+# Build files
+build/
+dist/
