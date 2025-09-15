@@ -13,19 +13,34 @@ import math
 
 class AIService:
     def __init__(self):
-        # Initialize AI models
-        try:
-            # Load image captioning model (runs locally, completely free)
-            self.caption_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-base")
-        except Exception as e:
-            print(f"Warning: Could not load AI captioning model: {e}")
-            self.caption_model = None
+        # Initialize AI models (lazy loading to save memory)
+        self.caption_model = None
+        self._model_loaded = False
+
+    def _load_caption_model(self):
+        """
+        Lazy load the captioning model when first needed
+        """
+        if not self._model_loaded:
+            try:
+                print("Loading AI captioning model...")
+                self.caption_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-base")
+                self._model_loaded = True
+                print("AI captioning model loaded successfully")
+            except Exception as e:
+                print(f"Warning: Could not load AI captioning model: {e}")
+                self.caption_model = None
+                self._model_loaded = True  # Don't try again
 
     def generate_image_description(self, image_path):
         """
         Generate AI-powered description of an image using local model
         Completely free, no API calls required
         """
+        # Lazy load the model
+        if not self._model_loaded:
+            self._load_caption_model()
+
         if not self.caption_model:
             return "AI description unavailable - model not loaded"
 
