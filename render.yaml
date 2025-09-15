@@ -2,7 +2,9 @@ services:
   - type: web
     name: photo-share-app
     runtime: python3
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      pip install -r requirements.txt
+      flask db upgrade
     startCommand: python app.py
     envVars:
       - key: FLASK_ENV
@@ -13,9 +15,17 @@ services:
         fromDatabase:
           name: photo-share-db
           property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: BASE_URL
+        value: https://photo-share-app.onrender.com
       - key: AWS_ACCESS_KEY_ID
         sync: false
       - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: us-east-1
+      - key: S3_BUCKET_NAME
         sync: false
 
 databases:

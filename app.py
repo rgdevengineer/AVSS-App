@@ -47,6 +47,17 @@ MAX_CHUNKS = 4000  # Maximum 20GB file (4000 * 5MB)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_base_url():
+    """Get the base URL for the application"""
+    if app.config.get('BASE_URL'):
+        return app.config['BASE_URL']
+    # Fallback to request context
+    try:
+        from flask import request
+        return request.host_url.rstrip('/')
+    except:
+        return 'http://127.0.0.1:5000'
+
 # -------------------
 # Models
 # -------------------
@@ -286,7 +297,7 @@ def upload_file():
         file.save(local_path)
 
         # Create local URL for access
-        local_url = f"http://127.0.0.1:5000/uploads/{unique_filename}"
+        local_url = f"{get_base_url()}/uploads/{unique_filename}"
 
         # AI Processing for images
         ai_description = None
@@ -430,7 +441,7 @@ def share_file(file_id):
 
     db.session.commit()
 
-    share_url = f"http://127.0.0.1:5000/shared/{share_token}"
+    share_url = f"{get_base_url()}/shared/{share_token}"
 
     return jsonify({
         "message": "File shared successfully",
@@ -844,7 +855,7 @@ def finalize_chunked_upload(session):
         # Save to local storage (FREE VERSION)
         local_final_path = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
         os.rename(final_path, local_final_path)  # Move from temp to final location
-        local_url = f"http://127.0.0.1:5000/uploads/{final_filename}"
+        local_url = f"{get_base_url()}/uploads/{final_filename}"
 
         # Determine file type category
         if session.mime_type.startswith('image/'):

@@ -21,3 +21,6 @@ class Config:
     # Storage limits
     FREE_STORAGE_LIMIT = 50 * 1024 * 1024 * 1024  # 50GB
     MAX_FILE_SIZE = 20 * 1024 * 1024 * 1024  # 20GB per file
+
+    # Base URL for file access (will be set dynamically)
+    BASE_URL = os.getenv('BASE_URL') or 'http://127.0.0.1:5000'
