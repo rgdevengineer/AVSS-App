@@ -868,6 +868,7 @@
     </div>
 
     <script>
+        const baseURL = 'http://127.0.0.1:5000';
         let currentToken = localStorage.getItem('token');
         let currentUser = null;
 
@@ -906,7 +907,7 @@
             }
 
             try {
-                const response = await fetch('/login', {
+                const response = await fetch('http://127.0.0.1:5000/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
@@ -990,7 +991,7 @@
         // Storage functions
         async function loadStorageInfo() {
             try {
-                const response = await fetch('/storage/info', {
+                const response = await fetch(`${baseURL}/storage/info`, {
                     headers: {
                         'Authorization': `Bearer ${currentToken}`
                     }
@@ -1010,7 +1011,7 @@
         // File functions
         async function loadFiles() {
             try {
-                const response = await fetch('/files', {
+                const response = await fetch(`${baseURL}/files`, {
                     headers: {
                         'Authorization': `Bearer ${currentToken}`
                     }
