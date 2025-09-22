@@ -132,27 +132,43 @@ def hello():
 # -------------------
 # Routes
 # -------------------
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'OPTIONS'])
 def signup():
+    # Handle preflight OPTIONS request
+    if request.method == 'OPTIONS':
+        response = jsonify({'message': 'OK'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
     if not username or not email or not password:
-        return jsonify({"message": "Username, email, and password are required"}), 400
+        response = jsonify({"message": "Username, email, and password are required"}), 400
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     if User.query.filter_by(username=username).first():
-        return jsonify({"message": "User already exists"}), 400
+        response = jsonify({"message": "User already exists"}), 400
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     if User.query.filter_by(email=email).first():
-        return jsonify({"message": "Email already exists"}), 400
+        response = jsonify({"message": "Email already exists"}), 400
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     hashed_password = generate_password_hash(password)
     new_user = User(username=username, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"message": "User created successfully"}), 201
+    response = jsonify({"message": "User created successfully"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 201
 
 @app.route('/login', methods=['POST'])
 def login():
