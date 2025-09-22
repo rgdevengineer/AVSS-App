@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager, create_access_token, create_refresh_t
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import Config
+from flask_cors import CORS
 import os
 import uuid
 import mimetypes
@@ -17,6 +18,9 @@ from services.ai_service import ai_service
 # -------------------
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# Enable CORS
+CORS(app)
 
 # Setup database and migration
 db = SQLAlchemy(app)

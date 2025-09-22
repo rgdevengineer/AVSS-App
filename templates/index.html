@@ -891,6 +891,11 @@
             document.querySelectorAll('.auth-tab')[0].classList.remove('active');
         }
 
+        // Initialize with signup form visible
+        document.addEventListener('DOMContentLoaded', function() {
+            showSignup();
+        });
+
         async function login() {
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
@@ -924,32 +929,51 @@
         }
 
         async function signup() {
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('signupEmail').value;
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
 
+            console.log('Signup attempt:', { username, email, hasPassword: !!password });
+
             if (!username || !email || !password) {
-                alert('Please fill in all fields');
+                alert('Please fill in all fields (username, email, and password are required)');
+                return;
+            }
+
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long');
                 return;
             }
 
             try {
+                console.log('Sending signup request...');
                 const response = await fetch('/signup', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
                 });
 
+                console.log('Response status:', response.status);
+
                 const data = await response.json();
+                console.log('Response data:', data);
 
                 if (response.ok) {
-                    alert('Account created successfully! Please login.');
+                    alert('Account created successfully! Please login with your credentials.');
                     showLogin();
                 } else {
-                    alert('Signup failed: ' + data.message);
+                    alert('Signup failed: ' + (data.message || 'Unknown error'));
                 }
             } catch (error) {
-                alert('Signup error: ' + error.message);
+                console.error('Signup error:', error);
+                alert('Signup error: ' + error.message + '\n\nPlease check your internet connection and try again.');
             }
         }
 
