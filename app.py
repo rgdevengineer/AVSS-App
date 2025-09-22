@@ -148,19 +148,19 @@ def signup():
     password = data.get('password')
 
     if not username or not email or not password:
-        response = jsonify({"message": "Username, email, and password are required"}), 400
+        response = jsonify({"message": "Username, email, and password are required"})
         response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+        return response, 400
 
     if User.query.filter_by(username=username).first():
-        response = jsonify({"message": "User already exists"}), 400
+        response = jsonify({"message": "User already exists"})
         response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+        return response, 400
 
     if User.query.filter_by(email=email).first():
-        response = jsonify({"message": "Email already exists"}), 400
+        response = jsonify({"message": "Email already exists"})
         response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+        return response, 400
 
     hashed_password = generate_password_hash(password)
     new_user = User(username=username, email=email, password=hashed_password)
@@ -170,22 +170,36 @@ def signup():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 201
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'OPTIONS'])
 def login():
+    # Handle preflight OPTIONS request
+    if request.method == 'OPTIONS':
+        response = jsonify({'message': 'OK'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({"message": "Username and password are required"}), 400
+        response = jsonify({"message": "Username and password are required"})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
     user = User.query.filter_by(username=username).first()
     if not user or not check_password_hash(user.password, password):
-        return jsonify({"message": "Invalid credentials"}), 401
+        response = jsonify({"message": "Invalid credentials"})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 401
 
     access_token = create_access_token(identity=username)
     refresh_token = create_refresh_token(identity=username)
-    return jsonify({"access_token": access_token, "refresh_token": refresh_token})
+    response = jsonify({"access_token": access_token, "refresh_token": refresh_token})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
